@@ -1,5 +1,5 @@
 // DEMO backend that runs in the browser (made-up data, saved in this browser only).
-// Mirrors the real server's rules: token check on every call, lockout after failed logins, version conflicts, frozen revisions.
+// Mirrors the real server's rules: token check on every call, version conflicts, frozen revisions.
 import { demoData } from './mock-data.js';
 
 export const DEMO_LOGIN = { code: 'DEMO', password: 'demo1234' };   // made-up demo credentials, not a real account
@@ -13,7 +13,7 @@ let mem = null;
 function load() {
   if (mem) return mem;
   try { mem = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { mem = null; }
-  if (!mem) mem = { ...demoData(), sessions: {}, fails: { count: 0, until: 0 } };
+  if (!mem) mem = { ...demoData(), sessions: {} };
   return mem;
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(mem)); } catch { /* private mode: keep in memory */ } }
@@ -28,12 +28,9 @@ export async function mockApi(action, p, token) {
   await new Promise((r) => setTimeout(r, 120));           // feel like a network call
   const db = load();
   if (action === 'login') {
-    if (Date.now() < db.fails.until) throw err('locked', `Too many failed attempts. Try again in ${Math.ceil((db.fails.until - Date.now()) / 1000)} s.`);
     if (String(p.code || '').trim().toUpperCase() !== DEMO_LOGIN.code || p.password !== DEMO_LOGIN.password) {
-      db.fails.count++; db.fails.until = db.fails.count >= 5 ? Date.now() + Math.min(2 ** (db.fails.count - 5), 900) * 1000 : 0; save();
       throw err('bad-login', 'Wrong user code or password.');
     }
-    db.fails = { count: 0, until: 0 };
     const t = rid('tok'), expires = Date.now() + 12 * 3600 * 1000;
     db.sessions[t] = { code: DEMO_LOGIN.code, expires }; save();
     return { token: t, expires, user: { code: DEMO_LOGIN.code, name: 'Demo User' } };

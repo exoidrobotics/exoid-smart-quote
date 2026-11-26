@@ -32,7 +32,7 @@ Patterns borrowed from the earlier solar tool (saved list, duplicate/delete, sha
 - **Sessions**: a correct login returns a random 256-bit token and its expiry (default 12 h). The server stores only the
   SHA-256 of the token with user code and expiry. Every action, read or write, checks the token first; no data is returned
   without a valid token. `doGet` returns no data at all. Logout deletes the token server-side.
-- **Brute force**: per-user-code failure counter with exponential delay (1, 2, 4 … capped at 15 minutes) plus a global cap
+- **Failed logins**: no lockout (owner decision). Passwords are long and hashed; every action still needs a valid token.
   on failed attempts per minute. Lockouts always expire, so an attacker cannot lock the owner out permanently; the owner can
   also clear lockouts from the Sheet menu. Failed attempts return the same generic message whether the code exists or not.
 - **Transport**: HTTPS POST with a `text/plain` JSON body (avoids CORS preflight). Inputs are validated server-side; values are
