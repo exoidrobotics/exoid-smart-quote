@@ -1,0 +1,7 @@
+# Confidential working data: never commit
+_private/
+*.xlsx
+*.xls
+*.xlsm
+*.zip
+*.ods
