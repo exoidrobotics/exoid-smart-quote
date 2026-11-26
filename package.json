@@ -1,0 +1,9 @@
+{
+  "name": "exoid-smart-quote",
+  "private": true,
+  "type": "module",
+  "description": "Exoid Robotics internal quotation tool. No build step; this file only enables `npm test` (node --test).",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}

@@ -1,6 +1,6 @@
 # Exoid Smart Quote: plan
 
-Status: **draft for approval** (Phase 1). Nothing is built until this plan is approved.
+Status: **approved**; prototype built in demo mode (see `docs/PROGRESS.md`).
 
 This file is public. It contains no client data, prices, rates, payment terms, bank details, user codes or credentials.
 Those live only in the owner's private Google Sheet and in the git-ignored `_private/` folder.
@@ -75,7 +75,7 @@ Money is held in **integer centavos**. Rounding rule: half away from zero, to th
 9. Grand total (VAT exclusive). No VAT is calculated or added anywhere.
 10. Payment stages: each = round(total × share); the last stage takes the centavo remainder, so stages always add up to the total.
 
-Labels and rates for markups, discounts and payment stages are data (presets in Settings, editable per quote), never hard-coded.
+Markup lines are **OCM** (Overhead, Miscellaneous & Contingencies) and **CP** (Contractor's Profit). Labels and rates for markups, discounts and payment stages are data (presets in Settings, editable per quote), never hard-coded.
 The BOQ, DUPA, Proforma, Proposal and the on-screen totals all call the same `calculate(quote)` function, so they cannot disagree.
 
 **Warnings** (shown in the editor, block "Mark as sent" until acknowledged): markup at both levels; a switched-on system with ₱0;
@@ -113,6 +113,7 @@ Generated in the browser with **pdfmake 0.2.x** (vendored in `vendor/`, no CDN).
 | BOQ (Exhibit A) | Project block; one line per system with materials, labor, equipment, unit price, amount and location notes; subtotal, each markup, discount, adjustment, grand total; signatures |
 | DUPA (Exhibit B) | One section per switched-on system: materials, labor (people × qty × rate), equipment, direct cost, system markup, unit price carried to Exhibit A |
 | Proforma Invoice | Systems summary, the same totals, payment schedule with amounts and due descriptions, payment channel |
+| Contract (Annex A) | Company and client, project location, clauses from Settings with the scope (switched-on systems), total and payment schedule filled in, signatures |
 
 Sample pages with made-up data were produced in Phase 1 for approval (kept privately, sent to the owner).
 Warranty and exclusions wording are approved by the owner before they go into the Proposal.
